@@ -19,21 +19,25 @@ class ShopSeeder extends Seeder
         $be = Country::firstOrCreate(['code' => 'BE'], ['name' => 'Belgium']);
 
         for ($i = 1; $i <= 5; $i++) {
-            Shop::firstOrCreate([
-                'slug' => Str::slug("Netherlands Shop {$i}"),
+            $nlSlug = Str::slug("Netherlands Shop {$i}");
+            $nlShop = Shop::firstOrCreate([
+                'id' => $nlSlug,
             ], [
                 'country_id' => $nl->id,
                 'name' => "Netherlands Shop {$i}",
                 'currency' => 'EUR',
             ]);
+            $nlShop->domains()->firstOrCreate(['domain' => "{$nlSlug}.localhost"]);
 
-            Shop::firstOrCreate([
-                'slug' => Str::slug("Belgium Shop {$i}"),
+            $beSlug = Str::slug("Belgium Shop {$i}");
+            $beShop = Shop::firstOrCreate([
+                'id' => $beSlug,
             ], [
                 'country_id' => $be->id,
                 'name' => "Belgium Shop {$i}",
                 'currency' => 'EUR',
             ]);
+            $beShop->domains()->firstOrCreate(['domain' => "{$beSlug}.localhost"]);
         }
     }
 }
