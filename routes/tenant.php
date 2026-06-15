@@ -33,4 +33,24 @@ Route::middleware([
 
     Route::get('/checkout', [\App\Http\Controllers\Tenant\CheckoutController::class, 'index'])->name('shop.checkout');
     Route::post('/checkout', [\App\Http\Controllers\Tenant\CheckoutController::class, 'store'])->name('shop.checkout.store');
+    Route::get('/checkout/success', [\App\Http\Controllers\Tenant\CheckoutController::class, 'success'])->name('shop.checkout.success');
+    Route::get('/checkout/cancel', [\App\Http\Controllers\Tenant\CheckoutController::class, 'cancel'])->name('shop.checkout.cancel');
+
+    // Admin Routes
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('/login', [\App\Http\Controllers\Tenant\Admin\LoginController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [\App\Http\Controllers\Tenant\Admin\LoginController::class, 'login']);
+        Route::post('/logout', [\App\Http\Controllers\Tenant\Admin\LoginController::class, 'logout'])->name('logout');
+
+        Route::middleware([\App\Http\Middleware\TenantAdmin::class])->group(function () {
+            Route::get('/', [\App\Http\Controllers\Tenant\Admin\DashboardController::class, 'index'])->name('dashboard');
+            
+            Route::resource('categories', \App\Http\Controllers\Tenant\Admin\CategoryController::class)->except(['show']);
+            Route::resource('products', \App\Http\Controllers\Tenant\Admin\ProductController::class)->except(['show']);
+            
+            Route::get('/orders', [\App\Http\Controllers\Tenant\Admin\OrderController::class, 'index'])->name('orders.index');
+            Route::get('/orders/{order}', [\App\Http\Controllers\Tenant\Admin\OrderController::class, 'show'])->name('orders.show');
+            Route::patch('/orders/{order}/status', [\App\Http\Controllers\Tenant\Admin\OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+        });
+    });
 });

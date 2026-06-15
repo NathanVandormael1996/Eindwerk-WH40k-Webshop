@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Stripe\Stripe;
+use Stripe\Checkout\Session;
 
 class CheckoutController extends Controller
 {
@@ -48,13 +50,27 @@ class CheckoutController extends Controller
 
         $products = Product::whereIn('id', array_keys($cart))->get();
         $totalAmount = 0;
+        
+        $lineItems = [];
+
         foreach ($products as $product) {
-            $totalAmount += $product->price * $cart[$product->id];
+            $quantity = $cart[$product->id];
+            $totalAmount += $product->price * $quantity;
+            
+            $lineItems[] = [
+                'price_data' => [
+                    'currency' => 'usd',
+                    'product_data' => [
+                        'name' => $product->name,
+                    ],
+                    'unit_amount' => $product->price,
+                ],
+                'quantity' => $quantity,
+            ];
         }
 
         DB::beginTransaction();
         try {
-            // Find or create user
             $user = User::firstOrCreate(
                 ['email' => $request->email],
                 [
@@ -78,13 +94,47 @@ class CheckoutController extends Controller
                 ]);
             }
 
-            DB::commit();
-            session()->forget('cart');
+            Stripe::setApiKey(env('STRIPE_SECRET'));
+            
+            $checkoutSession = Session::create([
+                'payment_method_types' => ['card'],
+                'line_items' => $lineItems,
+                'mode' => 'payment',
+                'success_url' => route('shop.checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('shop.checkout.cancel'),
+                'customer_email' => $request->email,
+            ]);
+            
+            $order->update(['stripe_session_id' => $checkoutSession->id]);
 
-            return redirect()->route('shop.home')->with('success', 'Order placed successfully!');
+            DB::commit();
+
+            return redirect($checkoutSession->url);
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Failed to place order. ' . $e->getMessage());
         }
+    }
+
+    public function success(Request $request)
+    {
+        $sessionId = $request->get('session_id');
+        if (!$sessionId) {
+            return redirect()->route('shop.home');
+        }
+        
+        $order = Order::where('stripe_session_id', $sessionId)->first();
+        if ($order && $order->status === 'pending') {
+            $order->update(['status' => 'paid']);
+            session()->forget('cart');
+            return redirect()->route('shop.home')->with('success', 'Payment successful! Your order has been placed.');
+        }
+
+        return redirect()->route('shop.home');
+    }
+
+    public function cancel()
+    {
+        return redirect()->route('shop.cart')->with('error', 'Payment was cancelled.');
     }
 }
