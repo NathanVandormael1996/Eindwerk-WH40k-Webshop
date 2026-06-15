@@ -23,7 +23,14 @@ Route::middleware([
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
-    Route::get('/', function () {
-        return 'This is your multi-tenant application. The id of the current tenant is ' . tenant('id');
-    });
+    Route::get('/', [\App\Http\Controllers\Tenant\ShopController::class, 'home'])->name('shop.home');
+    Route::get('/category/{slug}', [\App\Http\Controllers\Tenant\ShopController::class, 'category'])->name('shop.category');
+    Route::get('/product/{slug}', [\App\Http\Controllers\Tenant\ShopController::class, 'product'])->name('shop.product');
+
+    Route::get('/cart', [\App\Http\Controllers\Tenant\CartController::class, 'index'])->name('shop.cart');
+    Route::post('/cart/add/{product}', [\App\Http\Controllers\Tenant\CartController::class, 'add'])->name('shop.cart.add');
+    Route::post('/cart/remove/{product}', [\App\Http\Controllers\Tenant\CartController::class, 'remove'])->name('shop.cart.remove');
+
+    Route::get('/checkout', [\App\Http\Controllers\Tenant\CheckoutController::class, 'index'])->name('shop.checkout');
+    Route::post('/checkout', [\App\Http\Controllers\Tenant\CheckoutController::class, 'store'])->name('shop.checkout.store');
 });
