@@ -42,7 +42,10 @@
                 
                 <nav class="hidden md:flex space-x-6 ml-8">
                     <a href="{{ route('shop.home') }}" class="text-slate-300 hover:text-yellow-400 transition-colors uppercase text-sm tracking-widest font-semibold">Home</a>
-                    <!-- In a real app we might pass categories globally, here we just hardcode or omit -->
+                    <a href="{{ route('shop.category', 'paints') }}" class="text-slate-300 hover:text-yellow-400 transition-colors uppercase text-sm tracking-widest font-semibold">Paints</a>
+                    <a href="{{ route('shop.category', 'figurines') }}" class="text-slate-300 hover:text-yellow-400 transition-colors uppercase text-sm tracking-widest font-semibold">Figurines</a>
+                    <a href="{{ route('shop.category', 'videogames') }}" class="text-slate-300 hover:text-yellow-400 transition-colors uppercase text-sm tracking-widest font-semibold">Videogames</a>
+                    <a href="{{ route('shop.category', 'boardgames') }}" class="text-slate-300 hover:text-yellow-400 transition-colors uppercase text-sm tracking-widest font-semibold">Boardgames</a>
                 </nav>
             </div>
 

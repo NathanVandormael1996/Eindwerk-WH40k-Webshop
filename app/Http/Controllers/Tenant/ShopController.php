@@ -11,9 +11,12 @@ class ShopController extends Controller
 {
     public function home()
     {
-        $categories = Category::all();
-        $products = Product::latest()->take(12)->get();
-        return view('shop.home', compact('categories', 'products'));
+        // Load categories with their latest 4 products for the homepage carousels
+        $categories = Category::with(['products' => function($query) {
+            $query->latest()->take(4);
+        }])->get();
+        
+        return view('shop.home', compact('categories'));
     }
 
     public function category($slug)
