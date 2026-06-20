@@ -28,37 +28,58 @@ class TenantDatabaseSeeder extends Seeder
         ]);
 
         // Create Categories
-        $categories = [
-            'paints' => Category::firstOrCreate(['slug' => 'paints'], ['name' => 'Paints']),
-            'figurines' => Category::firstOrCreate(['slug' => 'figurines'], ['name' => 'Figurines']),
-            'videogames' => Category::firstOrCreate(['slug' => 'videogames'], ['name' => 'Videogames']),
-            'boardgames' => Category::firstOrCreate(['slug' => 'boardgames'], ['name' => 'Boardgames']),
+        $paintsCat = Category::firstOrCreate(['slug' => 'paints'], ['name' => 'Paints']);
+        $figsCat = Category::firstOrCreate(['slug' => 'figurines'], ['name' => 'Figurines']);
+        $gamesCat = Category::firstOrCreate(['slug' => 'videogames'], ['name' => 'Videogames']);
+        $boardgamesCat = Category::firstOrCreate(['slug' => 'boardgames'], ['name' => 'Boardgames']);
+
+        $paints = [
+            'Nuln Oil', 'Agrax Earthshade', 'Abaddon Black', 'Mephiston Red', 'Macragge Blue',
+            'Retributor Armour', 'Leadbelcher', 'Balthasar Gold', 'Khorne Red', 'Wraithbone',
+            'Corax White', 'Caliban Green', 'Averland Sunset', 'Zandri Dust', 'Bugmans Glow',
+            'Reikland Fleshshade', 'Drakenhof Nightshade', 'Seraphim Sepia', 'Lahmian Medium', 'Blood for the Blood God'
         ];
 
-        // Generator logic for each category
-        $generators = [
-            'paints' => ['prefix' => 'Citadel Base Paint', 'desc' => 'High quality acrylic paint for miniatures.', 'price_range' => [400, 800]],
-            'figurines' => ['prefix' => 'Warhammer 40k Miniature', 'desc' => 'Finely detailed plastic kit for tabletop gaming.', 'price_range' => [3500, 15000]],
-            'videogames' => ['prefix' => 'Warhammer Video Game', 'desc' => 'Immersive digital experience set in the 41st millennium.', 'price_range' => [1999, 6999]],
-            'boardgames' => ['prefix' => 'Warhammer Boxed Set', 'desc' => 'Complete tabletop experience with rules and miniatures.', 'price_range' => [8000, 25000]],
+        $figurines = [
+            'Roboute Guilliman', 'Mortarion', 'Magnus the Red', 'Angron', 'Lion El Jonson',
+            'Abaddon the Despoiler', 'Belisarius Cawl', 'Ghazghkull Thraka', 'Szarekh The Silent King', 'Commander Farsight',
+            'Commander Shadowsun', 'Lelith Hesperax', 'Trajann Valoris', 'Typhus', 'Kharn the Betrayer',
+            'Ahriman', 'Marneus Calgar', 'Commander Dante', 'Mephiston', 'The Swarmlord'
         ];
 
-        foreach ($categories as $key => $category) {
-            $gen = $generators[$key];
-            
-            for ($i = 1; $i <= 20; $i++) {
-                $name = "{$gen['prefix']} Model {$i}";
-                Product::firstOrCreate(
-                    ['slug' => Str::slug($name)],
-                    [
-                        'category_id' => $category->id,
-                        'name' => $name,
-                        'description' => "{$gen['desc']} This is variant {$i} of our premium collection.",
-                        'price' => rand($gen['price_range'][0], $gen['price_range'][1]),
-                        'stock' => rand(0, 100) > 10 ? rand(5, 50) : 0, // 10% chance of being out of stock
-                    ]
-                );
-            }
+        $videogames = [
+            'Warhammer 40k: Space Marine 2', 'Warhammer 40k: Darktide', 'Dawn of War GOTY', 'Dawn of War II', 'Dawn of War III',
+            'Warhammer 40k: Rogue Trader', 'Warhammer 40k: Mechanicus', 'Chaos Gate - Daemonhunters', 'Inquisitor - Martyr', 'Gladius - Relics of War',
+            'Warhammer 40k: Battlesector', 'Warhammer 40k: Boltgun', 'Warhammer 40k: Sanctus Reach', 'Warhammer 40k: Armageddon', 'Space Hulk: Deathwing',
+            'Space Hulk: Tactics', 'Shootas, Blood & Teef', 'Necromunda: Hired Gun', 'Necromunda: Underhive Wars', 'Battlefleet Gothic: Armada 2'
+        ];
+
+        $boardgames = [
+            'Kill Team: Octarius', 'Kill Team: Into the Dark', 'Kill Team: Chalnath', 'Space Hulk 4th Edition', 'Necromunda: Ash Wastes',
+            'Necromunda: Hive War', 'Blackstone Fortress', 'Adeptus Titanicus', 'Aeronautica Imperialis', 'Legions Imperialis',
+            'Betrayal at Calth', 'Burning of Prospero', 'Leviathan Boxed Set', 'Indomitus Boxed Set', 'Dark Imperium',
+            'Combat Patrol: Space Marines', 'Combat Patrol: Orks', 'Combat Patrol: Tyranids', 'Combat Patrol: Adeptus Custodes', 'Combat Patrol: Tau Empire'
+        ];
+
+        $this->seedCategory($paintsCat, $paints, 450, 800, 'High quality Citadel colour for your miniatures.');
+        $this->seedCategory($figsCat, $figurines, 3500, 15000, 'Finely detailed plastic miniature kit.');
+        $this->seedCategory($gamesCat, $videogames, 1999, 6999, 'Immersive digital experience set in the 41st millennium.');
+        $this->seedCategory($boardgamesCat, $boardgames, 8000, 25000, 'Complete tabletop experience with rules and miniatures.');
+    }
+
+    private function seedCategory($category, $items, $minPrice, $maxPrice, $descTemplate)
+    {
+        foreach ($items as $item) {
+            Product::firstOrCreate(
+                ['slug' => Str::slug($item)],
+                [
+                    'category_id' => $category->id,
+                    'name' => $item,
+                    'description' => $descTemplate,
+                    'price' => rand($minPrice, $maxPrice),
+                    'stock' => rand(0, 100) > 10 ? rand(5, 50) : 0,
+                ]
+            );
         }
     }
 }
