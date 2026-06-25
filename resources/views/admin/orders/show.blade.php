@@ -47,18 +47,18 @@
                                 <div class="font-bold text-slate-200">{{ $item->product->name ?? 'Unknown Relic' }}</div>
                                 <div class="text-xs text-slate-500">SKU: RELIC-{{ str_pad($item->product_id, 4, '0', STR_PAD_LEFT) }}</div>
                             </td>
-                            <td class="px-6 py-4 text-center">${{ number_format($item->unit_price / 100, 2) }}</td>
+                            <td class="px-6 py-4 text-center">€{{ number_format($item->unit_price / 100, 2) }}</td>
                             <td class="px-6 py-4 text-center">
                                 <span class="bg-slate-900 px-2 py-1 rounded text-slate-300 font-bold border border-slate-700">{{ $item->quantity }}</span>
                             </td>
-                            <td class="px-6 py-4 text-right font-bold text-yellow-500">${{ number_format(($item->unit_price * $item->quantity) / 100, 2) }}</td>
+                            <td class="px-6 py-4 text-right font-bold text-yellow-500">€{{ number_format(($item->unit_price * $item->quantity) / 100, 2) }}</td>
                         </tr>
                         @endforeach
                     </tbody>
                     <tfoot class="bg-slate-900/30">
                         <tr>
                             <td colspan="3" class="px-6 py-4 text-right font-bold text-slate-300">Total Amount:</td>
-                            <td class="px-6 py-4 text-right font-bold text-yellow-500 text-lg">${{ number_format($order->total_amount / 100, 2) }}</td>
+                            <td class="px-6 py-4 text-right font-bold text-yellow-500 text-lg">€{{ number_format($order->total_amount / 100, 2) }}</td>
                         </tr>
                     </tfoot>
                 </table>

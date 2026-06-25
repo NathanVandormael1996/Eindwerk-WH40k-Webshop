@@ -32,8 +32,8 @@ new #[Layout('components.layouts.app')] class extends Component
         <div class="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
             <!-- Product Image -->
             <div class="lg:max-w-lg lg:self-end">
-                <div class="aspect-w-1 aspect-h-1 rounded-[12px] overflow-hidden bg-white shadow-whisper">
-                    <img src="/images/warhammer_placeholder.png" alt="{{ $product->name }}" class="w-full h-full object-center object-cover border border-brand-neutral-100 rounded-[12px]">
+                <div class="aspect-w-1 aspect-h-1 rounded-[12px] overflow-hidden bg-slate-900 flex items-center justify-center p-6 shadow-whisper">
+                    <img src="{{ $product->image_url ?? '/images/warhammer_placeholder.png' }}" alt="{{ $product->name }}" class="max-w-full max-h-full object-contain border border-brand-neutral-100 rounded-[12px]">
                 </div>
             </div>
 
@@ -43,7 +43,7 @@ new #[Layout('components.layouts.app')] class extends Component
                 
                 <div class="mt-3">
                     <h2 class="sr-only">Product information</h2>
-                    <p class="text-3xl text-antigravity font-bold">${{ number_format($product->price / 100, 2) }}</p>
+                    <p class="text-3xl text-antigravity font-bold">€{{ number_format($product->price / 100, 2) }}</p>
                 </div>
 
                 <!-- Stock Badge -->

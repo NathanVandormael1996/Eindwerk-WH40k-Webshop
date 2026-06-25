@@ -37,6 +37,9 @@ export default {
             },
             boxShadow: {
                 whisper: '0px 4px 24px rgba(0,0,0,0.03)',
+            },
+            maxWidth: {
+                '8xl': '90rem',
             }
         },
     },

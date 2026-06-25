@@ -19,6 +19,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        \Livewire\Livewire::setUpdateRoute(function ($handle) {
+            return \Illuminate\Support\Facades\Route::post('/livewire/update', $handle)
+                ->middleware([
+                    'web',
+                    \Stancl\Tenancy\Middleware\InitializeTenancyByDomain::class,
+                    \Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains::class,
+                ]);
+        });
     }
 }

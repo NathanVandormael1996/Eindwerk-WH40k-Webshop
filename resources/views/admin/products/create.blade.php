@@ -37,7 +37,7 @@
                 <div>
                     <label for="price" class="block text-sm font-semibold text-slate-400 mb-2">Price (in cents)</label>
                     <input type="number" id="price" name="price" value="{{ old('price') }}" required min="0" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:outline-none focus:border-yellow-500">
-                    <p class="text-xs text-slate-500 mt-1">E.g., 2999 for $29.99</p>
+                    <p class="text-xs text-slate-500 mt-1">E.g., 2999 for €29.99</p>
                     @error('price') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                 </div>
                 

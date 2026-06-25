@@ -52,7 +52,7 @@
                     </div>
                     
                     <div class="pt-6 border-t border-slate-700/50 flex justify-between items-center">
-                        <a href="{{ route('shop.cart') }}" class="text-slate-400 hover:text-yellow-500 transition-colors text-sm font-bold">
+                        <a href="{{ route('shop.cart.index') }}" class="text-slate-400 hover:text-yellow-500 transition-colors text-sm font-bold">
                             &larr; Modify Requisition
                         </a>
                         <button type="submit" class="bg-yellow-600 hover:bg-yellow-500 text-slate-900 font-bold py-3 px-8 rounded-lg transition-all shadow-[0_0_15px_rgba(234,179,8,0.3)] hover:shadow-[0_0_20px_rgba(234,179,8,0.5)] uppercase tracking-wider text-lg flex items-center gap-2">
@@ -76,7 +76,7 @@
                             <div class="text-slate-300 font-bold">{{ $cart[$product->id] }}x</div>
                             <div class="text-slate-400 truncate max-w-[150px]">{{ $product->name }}</div>
                         </div>
-                        <div class="text-slate-300 font-semibold">${{ number_format(($product->price * $cart[$product->id]) / 100, 2) }}</div>
+                        <div class="text-slate-300 font-semibold">€{{ number_format(($product->price * $cart[$product->id]) / 100, 2) }}</div>
                     </div>
                     @endforeach
                 </div>
@@ -84,7 +84,7 @@
                 <div class="border-t border-slate-700/50 pt-4 space-y-2 mb-4">
                     <div class="flex justify-between text-sm text-slate-400">
                         <span>Subtotal</span>
-                        <span>${{ number_format($total / 100, 2) }}</span>
+                        <span>€{{ number_format($total / 100, 2) }}</span>
                     </div>
                     <div class="flex justify-between text-sm text-slate-400">
                         <span>Shipping</span>
@@ -94,7 +94,7 @@
                 
                 <div class="border-t border-slate-700/50 pt-4 flex justify-between items-center">
                     <span class="font-bold text-slate-200 uppercase tracking-wider text-sm">Total Due</span>
-                    <span class="font-bold text-2xl text-yellow-500">${{ number_format($total / 100, 2) }}</span>
+                    <span class="font-bold text-2xl text-yellow-500">€{{ number_format($total / 100, 2) }}</span>
                 </div>
             </div>
         </div>

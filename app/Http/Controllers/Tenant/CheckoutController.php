@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
+use App\Http\Requests\Tenant\StoreCheckoutRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +22,7 @@ class CheckoutController extends Controller
         $cart = session()->get('cart', []);
         
         if (empty($cart)) {
-            return redirect()->route('shop.cart')->with('error', 'Your cart is empty.');
+            return redirect()->route('shop.cart.index')->with('error', 'Your cart is empty.');
         }
 
         $products = Product::whereIn('id', array_keys($cart))->get();
@@ -33,20 +34,12 @@ class CheckoutController extends Controller
         return view('shop.checkout', compact('products', 'cart', 'total'));
     }
 
-    public function store(Request $request)
+    public function store(StoreCheckoutRequest $request)
     {
         $cart = session()->get('cart', []);
         if (empty($cart)) {
             return redirect()->route('shop.home');
         }
-
-        $request->validate([
-            'email' => 'required|email',
-            'name' => 'required|string|max:255',
-            'address' => 'required|string',
-            'city' => 'required|string',
-            'postal_code' => 'required|string',
-        ]);
 
         $products = Product::whereIn('id', array_keys($cart))->get();
         $totalAmount = 0;
@@ -59,7 +52,7 @@ class CheckoutController extends Controller
             
             $lineItems[] = [
                 'price_data' => [
-                    'currency' => 'usd',
+                    'currency' => 'eur',
                     'product_data' => [
                         'name' => $product->name,
                     ],
@@ -103,6 +96,10 @@ class CheckoutController extends Controller
                 'success_url' => route('shop.checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url' => route('shop.checkout.cancel'),
                 'customer_email' => $request->email,
+                'metadata' => [
+                    'order_id' => $order->id,
+                    'tenant_id' => tenant('id'),
+                ],
             ]);
             
             $order->update(['stripe_session_id' => $checkoutSession->id]);
@@ -135,6 +132,6 @@ class CheckoutController extends Controller
 
     public function cancel()
     {
-        return redirect()->route('shop.cart')->with('error', 'Payment was cancelled.');
+        return redirect()->route('shop.cart.index')->with('error', 'Payment was cancelled.');
     }
 }

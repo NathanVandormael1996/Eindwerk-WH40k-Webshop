@@ -23,7 +23,7 @@
                         <div class="font-bold text-slate-200">{{ $order->user->name }}</div>
                         <div class="text-xs text-slate-500">{{ $order->user->email }}</div>
                     </td>
-                    <td class="px-6 py-4 text-yellow-500 font-semibold">${{ number_format($order->total_amount / 100, 2) }}</td>
+                    <td class="px-6 py-4 text-yellow-500 font-semibold">€{{ number_format($order->total_amount / 100, 2) }}</td>
                     <td class="px-6 py-4">
                         <span class="px-2 py-1 rounded text-xs font-bold uppercase
                             {{ $order->status === 'paid' ? 'bg-emerald-900/50 text-emerald-400 border border-emerald-800' : '' }}

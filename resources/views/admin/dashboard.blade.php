@@ -16,7 +16,7 @@
         
         <div class="bg-slate-950 border border-slate-800 p-6 rounded-xl shadow border-b-4 border-b-yellow-600">
             <h3 class="text-slate-400 font-semibold mb-2 uppercase tracking-wider text-sm">Revenue (Paid)</h3>
-            <div class="text-4xl font-bold text-yellow-500">${{ number_format($totalRevenue / 100, 2) }}</div>
+            <div class="text-4xl font-bold text-yellow-500">€{{ number_format($totalRevenue / 100, 2) }}</div>
         </div>
     </div>
 
@@ -41,7 +41,7 @@
                         </a>
                     </td>
                     <td class="px-6 py-4">{{ $order->user->name }}</td>
-                    <td class="px-6 py-4 font-bold text-slate-300">${{ number_format($order->total_amount / 100, 2) }}</td>
+                    <td class="px-6 py-4 font-bold text-slate-300">€{{ number_format($order->total_amount / 100, 2) }}</td>
                     <td class="px-6 py-4">
                         <span class="px-2 py-1 rounded text-xs font-bold uppercase
                             {{ $order->status === 'paid' ? 'bg-emerald-900/50 text-emerald-400 border border-emerald-800' : '' }}

@@ -22,8 +22,12 @@
                     @foreach($products as $product)
                     <div class="p-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                         <div class="col-span-1 md:col-span-6 flex items-center gap-4">
-                            <div class="w-16 h-16 bg-slate-800 rounded flex items-center justify-center flex-shrink-0 border border-slate-700">
-                                <span class="text-2xl opacity-50">🛡️</span>
+                            <div class="w-16 h-16 bg-slate-800 rounded flex items-center justify-center flex-shrink-0 border border-slate-700 relative overflow-hidden">
+                                @if($product->image_url)
+                                    <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="absolute inset-0 w-full h-full object-cover">
+                                @else
+                                    <span class="text-2xl opacity-50">🛡️</span>
+                                @endif
                             </div>
                             <div>
                                 <a href="{{ route('shop.product', $product->slug) }}" class="font-cinzel font-bold text-slate-200 hover:text-yellow-400 text-lg transition-colors">
@@ -35,7 +39,7 @@
                         
                         <div class="col-span-1 md:col-span-2 md:text-center font-semibold text-slate-300">
                             <span class="md:hidden text-slate-500 text-sm font-normal mr-2">Price:</span>
-                            ${{ number_format($product->price / 100, 2) }}
+                            €{{ number_format($product->price / 100, 2) }}
                         </div>
                         
                         <div class="col-span-1 md:col-span-2 md:text-center">
@@ -48,7 +52,7 @@
                         <div class="col-span-1 md:col-span-2 flex items-center justify-between md:justify-end gap-4">
                             <span class="md:hidden text-slate-500 text-sm font-normal">Total:</span>
                             <span class="font-bold text-yellow-500 text-lg">
-                                ${{ number_format(($product->price * $product->cart_quantity) / 100, 2) }}
+                                €{{ number_format(($product->price * $product->cart_quantity) / 100, 2) }}
                             </span>
                             
                             <form action="{{ route('shop.cart.remove', $product->id) }}" method="POST">
@@ -79,7 +83,7 @@
                 <div class="space-y-4 mb-6">
                     <div class="flex justify-between text-slate-300">
                         <span>Subtotal</span>
-                        <span>${{ number_format($total / 100, 2) }}</span>
+                        <span>€{{ number_format($total / 100, 2) }}</span>
                     </div>
                     <div class="flex justify-between text-slate-300">
                         <span>Shipping (Drop Pod)</span>
@@ -94,11 +98,11 @@
                 <div class="border-t border-slate-700/50 pt-4 mb-8">
                     <div class="flex justify-between items-center">
                         <span class="font-bold text-slate-200">Total</span>
-                        <span class="font-bold text-2xl text-yellow-500">${{ number_format($total / 100, 2) }}</span>
+                        <span class="font-bold text-2xl text-yellow-500">€{{ number_format($total / 100, 2) }}</span>
                     </div>
                 </div>
                 
-                <a href="{{ route('shop.checkout') }}" class="block w-full text-center bg-yellow-600 hover:bg-yellow-500 text-slate-900 font-bold py-3 px-6 rounded-lg transition-all shadow-[0_0_15px_rgba(234,179,8,0.3)] hover:shadow-[0_0_20px_rgba(234,179,8,0.5)] uppercase tracking-wider">
+                <a href="{{ route('shop.checkout.index') }}" class="block w-full text-center bg-yellow-600 hover:bg-yellow-500 text-slate-900 font-bold py-3 px-6 rounded-lg transition-all shadow-[0_0_15px_rgba(234,179,8,0.3)] hover:shadow-[0_0_20px_rgba(234,179,8,0.5)] uppercase tracking-wider">
                     Proceed to Checkout
                 </a>
             </div>
