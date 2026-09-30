@@ -90,7 +90,7 @@
                                                 @endif
                                                 <div class="flex-grow">
                                                     <h4 class="text-slate-200 text-sm font-semibold">{{ $item->product ? $item->product->name : 'Unknown Relic' }}</h4>
-                                                    <p class="text-slate-500 text-xs mt-0.5">Qty: {{ $item->quantity }} &times; €{{ number_format($item->price / 100, 2) }}</p>
+                                                    <p class="text-slate-500 text-xs mt-0.5">Qty: {{ $item->quantity }} &times; €{{ number_format($item->unit_price / 100, 2) }}</p>
                                                 </div>
                                             </div>
                                         @endforeach
